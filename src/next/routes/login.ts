@@ -41,10 +41,10 @@ export async function login(
   const token = await sdk.auth.generateAuthToken(domain, payload);
 
   // Securely set httpOnly cookie on request to prevent XSS on frontend
-  // And set path to / to enable access_token usage on all endpoints
+  // And set path to / to enable thirdweb_auth_token usage on all endpoints
   res.setHeader(
     "Set-Cookie",
-    serialize("access_token", token, {
+    serialize("thirdweb_auth_token", token, {
       path: "/",
       httpOnly: true,
       secure: true,
