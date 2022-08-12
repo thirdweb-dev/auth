@@ -13,7 +13,7 @@
 
 ## Installation
 
-Install the latest version of the SDK with either `npm` or `yarn:
+Install the latest version of the SDK with either `npm` or `yarn`:
 
 ```shell
 npm install @thirdweb-dev/auth @thirdweb-dev/sdk ethers
