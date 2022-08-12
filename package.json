@@ -1,0 +1,29 @@
+{
+  "name": "@thirdweb-dev/auth",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/thirdweb-dev/auth.git",
+  "author": "adam-maj <mr.adam.maj@gmail.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@microsoft/api-documenter": "^7.19.4",
+    "@microsoft/api-extractor": "^7.29.2",
+    "@microsoft/tsdoc": "^0.14.1",
+    "@trivago/prettier-plugin-sort-imports": "^3.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-inclusive-language": "^2.2.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-tsdoc": "^0.2.16",
+    "next": "12.2.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "@thirdweb-dev/sdk": "^2.3.23",
+    "ethers": ">=5.5.1"
+  }
+}
