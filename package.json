@@ -1,15 +1,33 @@
 {
   "name": "@thirdweb-dev/auth",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/thirdweb-dev-auth.cjs.js",
   "repository": "https://github.com/thirdweb-dev/auth.git",
   "author": "adam-maj <mr.adam.maj@gmail.com>",
   "license": "Apache-2.0",
+  "files": [
+    "dist/",
+    "express/",
+    "next/"
+  ],
+  "scripts": {
+    "build": "preconstruct build"
+  },
+  "preconstruct": {
+    "entrypoints": [
+      "next/index.ts",
+      "express/index.ts"
+    ]
+  },
   "devDependencies": {
+    "@babel/preset-env": "^7.18.10",
+    "@babel/preset-typescript": "^7.18.6",
     "@microsoft/api-documenter": "^7.19.4",
     "@microsoft/api-extractor": "^7.29.2",
     "@microsoft/tsdoc": "^0.14.1",
+    "@preconstruct/cli": "^2.2.1",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
+    "@types/cookie": "^0.5.1",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "^8.21.0",
@@ -23,7 +41,10 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@thirdweb-dev/sdk": "^2.3.23",
+    "@thirdweb-dev/sdk": "^2.3.35",
     "ethers": ">=5.5.1"
+  },
+  "dependencies": {
+    "cookie": "^0.5.0"
   }
 }

@@ -1,13 +1,8 @@
 import { login } from "./routes/login";
 import { logout } from "./routes/logout";
+import { unauthorized } from "./routes/unauthorized";
+import { ThirdwebAuthRoute, ThirdwebAuthOptions } from "./types";
 import { NextApiRequest, NextApiResponse } from "next";
-
-type ThirdwebAuthAction = "login" | "logout";
-
-export type ThirdwebAuthOptions = {
-  domain: string;
-  privateKey: string;
-};
 
 async function ThirdwebAuthHandler(
   req: NextApiRequest,
@@ -16,19 +11,23 @@ async function ThirdwebAuthHandler(
 ) {
   // Catch-all route must be named with [...thirdweb]
   const { thirdweb } = req.query;
-  const action = thirdweb?.[0] as ThirdwebAuthAction;
+  const action = thirdweb?.[0] as ThirdwebAuthRoute;
 
   switch (action) {
     case "login":
-      await login(req, res);
-      break;
+      return await login(req, res, options);
     case "logout":
-      await logout(req, res);
-      break;
+      return await logout(req, res);
+    case "unauthorized":
+      return await unauthorized(req, res);
+    default:
+      return res.status(400).json({
+        error: "Invalid route for authentication.",
+      });
   }
 }
 
-export default async function ThirdwebAuth(
+export async function ThirdwebAuth(
   ...args:
     | [ThirdwebAuthOptions]
     | [NextApiRequest, NextApiResponse, ThirdwebAuthOptions]

@@ -1,3 +1,4 @@
+import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export async function logout(req: NextApiRequest, res: NextApiResponse) {
@@ -7,5 +8,14 @@ export async function logout(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  return;
+  // Set the access token to 'none' and expire in 5 seconds
+  res.setHeader(
+    "Set-Cookie",
+    serialize("access_token", "none", {
+      path: "/",
+      expires: new Date(Date.now() + 5 * 1000),
+    })
+  );
+
+  return res.status(200).json("Successfully logged out.");
 }
