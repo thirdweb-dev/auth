@@ -1,8 +1,17 @@
+import { getSDK } from "../helpers";
 import { ThirdwebAuthOptions } from "../types";
-import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { LoginPayload } from "@thirdweb-dev/sdk/dist/src/schema";
 import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
+
+function redirectWithError(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  error: string
+) {
+  const encodedError = encodeURIComponent(error);
+  return res.redirect(`${req.headers.referer as string}?error=${encodedError}`);
+}
 
 export async function login(
   req: NextApiRequest,
@@ -10,28 +19,21 @@ export async function login(
   options: ThirdwebAuthOptions
 ) {
   if (req.method !== "GET") {
-    const error = encodeURIComponent("invalid_method");
-    return res.redirect(`${req.url as string}?error=${error}`);
+    return redirectWithError(req, res, "Invalid method. Only GET supported.");
   }
 
-  const { privateKey } = options;
-  if (!privateKey) {
-    console.error("Missing ADMIN_PRIVATE_KEY environment variable");
-    return res.status(500).json({
-      error: "Admin private key not set",
-    });
+  let sdk;
+  try {
+    sdk = getSDK(options.privateKey);
+  } catch (err) {
+    console.error(err);
+    return redirectWithError(req, res, "Invalid private key.");
   }
-
-  const sdk = ThirdwebSDK.fromPrivateKey(
-    process.env.ADMIN_PRIVATE_KEY as string,
-    "mainnet"
-  );
 
   // Get signed login payload from the frontend
   const payload = JSON.parse(req.query.payload as string) as LoginPayload;
   if (!payload) {
-    const error = encodeURIComponent("invalid_payload");
-    return res.redirect(`${req.url as string}?error=${error}`);
+    redirectWithError(req, res, "Invalid login payload.");
   }
 
   // Generate an access token with the SDK using the signed payload

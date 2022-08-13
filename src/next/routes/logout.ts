@@ -11,11 +11,11 @@ export async function logout(req: NextApiRequest, res: NextApiResponse) {
   // Set the access token to 'none' and expire in 5 seconds
   res.setHeader(
     "Set-Cookie",
-    serialize("access_token", "none", {
+    serialize("thirdweb_auth_token", "", {
       path: "/",
       expires: new Date(Date.now() + 5 * 1000),
     })
   );
 
-  return res.status(301).redirect(req.url as string);
+  return res.status(301).redirect(req.headers.referer as string);
 }

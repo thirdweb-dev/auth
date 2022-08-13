@@ -3,25 +3,34 @@ import { ThirdwebMiddlewareOptions } from "./types";
 import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
+function unauthorized(req: NextApiRequest, options: ThirdwebMiddlewareOptions) {
+  const authUrl = options.authUrl?.replace(/\/$/, "");
+  return NextResponse.redirect(
+    new URL(`${authUrl}/unauthorized`, req.headers.origin)
+  );
+}
+
 async function middleware(
   req: NextApiRequest,
   options: ThirdwebMiddlewareOptions
 ) {
   const token = req.cookies.thirdweb_auth_token;
   if (!token) {
-    return NextResponse.redirect(
-      new URL(`${options.authUrl}/unauthorized`, req.url)
-    );
+    return unauthorized(req, options);
   }
 
-  const sdk = getSDK(options.privateKey);
+  let sdk;
+  try {
+    sdk = getSDK(options.privateKey);
+  } catch (err) {
+    console.error(err);
+    return unauthorized(req, options);
+  }
 
   try {
     await sdk.auth.authenticate(options.domain, token);
   } catch {
-    return NextResponse.redirect(
-      new URL(`${options.authUrl}/unauthorized`, req.url)
-    );
+    return unauthorized(req, options);
   }
 
   return NextResponse.next();
