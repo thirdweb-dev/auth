@@ -1,10 +1,9 @@
-node_modules/
-dist/
-express/
-next/
-.yalc/
+/node_modules
+/dist
+/express
+/next
+/.yalc
 yalc.lock
 yarn-error.log
 .DS_Store
-.parcel-cache/
 package-lock.json

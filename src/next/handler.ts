@@ -27,7 +27,7 @@ async function ThirdwebAuthHandler(
   }
 }
 
-export async function ThirdwebAuth(
+export function ThirdwebAuth(
   ...args:
     | [ThirdwebAuthOptions]
     | [NextApiRequest, NextApiResponse, ThirdwebAuthOptions]

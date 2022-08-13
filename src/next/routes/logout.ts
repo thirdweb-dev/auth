@@ -17,5 +17,5 @@ export async function logout(req: NextApiRequest, res: NextApiResponse) {
     })
   );
 
-  return res.status(200).json("Successfully logged out.");
+  return res.status(301).redirect(req.url as string);
 }
