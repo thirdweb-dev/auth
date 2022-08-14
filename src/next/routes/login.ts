@@ -19,7 +19,7 @@ export async function login(
   options: ThirdwebAuthOptions
 ) {
   if (req.method !== "GET") {
-    return redirectWithError(req, res, "Invalid method. Only GET supported.");
+    return redirectWithError(req, res, "INVALID_METHOD");
   }
 
   let sdk;
@@ -27,13 +27,13 @@ export async function login(
     sdk = getSDK(options.privateKey);
   } catch (err) {
     console.error(err);
-    return redirectWithError(req, res, "Invalid private key.");
+    return redirectWithError(req, res, "INVALID_PRIVATE_KEY");
   }
 
   // Get signed login payload from the frontend
   const payload = JSON.parse(req.query.payload as string) as LoginPayload;
   if (!payload) {
-    redirectWithError(req, res, "Invalid login payload.");
+    redirectWithError(req, res, "INVALID_LOGIN_PAYLOAD");
   }
 
   // Generate an access token with the SDK using the signed payload

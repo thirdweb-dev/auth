@@ -1,7 +1,6 @@
-import { ThirdwebAuthOptions, ThirdwebMiddlewareOptions } from "../types";
+import { ThirdwebAuthOptions } from "../types";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
 
 /**
  * @internal
