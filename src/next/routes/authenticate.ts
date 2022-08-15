@@ -1,33 +1,25 @@
-import { getSDK } from "../helpers";
-import { ThirdwebAuthOptions } from "../types";
+import { getConfig } from "../helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 
-function unauthorized(req: NextApiRequest, res: NextApiResponse) {
-  return res.redirect(`${req.headers.origin as string}/unauthorized`);
-}
-
-export async function authenticate(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  options: ThirdwebAuthOptions
-) {
+export async function authenticate(req: NextApiRequest, res: NextApiResponse) {
+  const { authUrl } = getConfig();
   const token = req.cookies.thirdweb_auth_token;
   if (!token) {
-    return unauthorized(req, res);
+    return res.redirect(`${authUrl}/unauthorized`);
   }
 
-  let sdk;
+  let sdk, domain;
   try {
-    sdk = getSDK(options.privateKey);
+    ({ sdk, domain } = getConfig());
   } catch (err) {
     console.error(err);
-    return unauthorized(req, res);
+    return res.redirect(`${authUrl}/unauthorized`);
   }
 
   try {
-    await sdk.auth.authenticate(options.domain, token);
+    await sdk.auth.authenticate(domain, token);
   } catch {
-    return unauthorized(req, res);
+    return res.redirect(`${authUrl}/unauthorized`);
   }
 
   return res.status(200).json(true);

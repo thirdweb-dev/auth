@@ -1,46 +1,34 @@
-import { getSDK } from "./helpers";
-import { ThirdwebMiddlewareOptions } from "./types";
+import { getConfig } from "./helpers";
 import { NextRequest, NextResponse } from "next/server";
 
-function unauthorized(req: NextRequest, options: ThirdwebMiddlewareOptions) {
-  const authUrl = options.authUrl?.replace(/\/$/, "");
-  return NextResponse.redirect(new URL(`${authUrl}/unauthorized`, req.url));
-}
-
-async function middleware(
-  req: NextRequest,
-  options: ThirdwebMiddlewareOptions
-) {
+async function middleware(req: NextRequest) {
+  const { authUrl } = getConfig();
   const token = req.cookies.get("thirdweb_auth_token");
   if (!token) {
-    return unauthorized(req, options);
+    return NextResponse.redirect(new URL(`${authUrl}/unauthorized`, req.url));
   }
 
-  let sdk;
+  let sdk, domain;
   try {
-    sdk = getSDK(options.privateKey);
+    ({ sdk, domain } = getConfig());
   } catch (err) {
     console.error(err);
-    return unauthorized(req, options);
+    return NextResponse.redirect(new URL(`${authUrl}/unauthorized`, req.url));
   }
 
   try {
-    await sdk.auth.authenticate(options.domain, token);
+    await sdk.auth.authenticate(domain, token);
   } catch {
-    return unauthorized(req, options);
+    return NextResponse.redirect(new URL(`${authUrl}/unauthorized`, req.url));
   }
 
   return NextResponse.next();
 }
 
-export function ThirdwebMiddleware(
-  ...args:
-    | [ThirdwebMiddlewareOptions]
-    | [NextRequest, ThirdwebMiddlewareOptions]
-) {
-  if (args.length === 1) {
-    return async (req: NextRequest) => await middleware(req, args[0]);
+export function ThirdwebMiddleware(...args: [] | [NextRequest]) {
+  if (args.length === 0) {
+    return async (req: NextRequest) => await middleware(req);
   }
 
-  return middleware(args[0], args[1]);
+  return middleware(args[0]);
 }
