@@ -1,25 +1,26 @@
-import { getConfig } from "../helpers";
+import { ThirdwebAuthContext } from "../types";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export async function authenticate(req: NextApiRequest, res: NextApiResponse) {
-  const { authUrl } = getConfig();
+export async function authenticate(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  ctx: ThirdwebAuthContext
+) {
   const token = req.cookies.thirdweb_auth_token;
   if (!token) {
-    return res.redirect(`${authUrl}/unauthorized`);
+    return res.status(401).json({
+      message: "Not authorized.",
+    });
   }
 
-  let sdk, domain;
-  try {
-    ({ sdk, domain } = getConfig());
-  } catch (err) {
-    console.error(err);
-    return res.redirect(`${authUrl}/unauthorized`);
-  }
+  const { sdk, domain } = ctx;
 
   try {
     await sdk.auth.authenticate(domain, token);
   } catch {
-    return res.redirect(`${authUrl}/unauthorized`);
+    return res.status(401).json({
+      message: "Not authorized.",
+    });
   }
 
   return res.status(200).json(true);
