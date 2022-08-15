@@ -1,4 +1,5 @@
 export * from "./handler";
 export * from "./middleware";
-export * from "./helpers";
 export * from "./types";
+
+export { getUserAddress, withThirdwebAuth } from "./helpers";
