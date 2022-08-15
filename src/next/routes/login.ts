@@ -9,7 +9,9 @@ function redirectWithError(
   error: string
 ) {
   const encodedError = encodeURIComponent(error);
-  return res.redirect(`${req.headers.referer as string}?error=${encodedError}`);
+  const url = new URL(req.headers.referer as string);
+  url.searchParams.set("error", encodedError);
+  return res.redirect(url.toString());
 }
 
 export async function login(req: NextApiRequest, res: NextApiResponse) {
@@ -22,7 +24,7 @@ export async function login(req: NextApiRequest, res: NextApiResponse) {
     ({ sdk, domain } = getConfig());
   } catch (err) {
     console.error(err);
-    return redirectWithError(req, res, "MISSING_PRIVATE_KEY");
+    return redirectWithError(req, res, "MISSING_SERVER_CONFIG");
   }
 
   // Get signed login payload from the frontend
