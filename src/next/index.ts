@@ -1,6 +1,6 @@
-import { authenticate } from "./routes/authenticate";
-import { login } from "./routes/login";
-import { logout } from "./routes/logout";
+import loginHandler from "./routes/login";
+import logoutHandler from "./routes/logout";
+import userHandler from "./routes/user";
 import {
   ThirdwebAuthConfig,
   ThirdwebAuthContext,
@@ -23,11 +23,11 @@ async function ThirdwebAuthRouter(
 
   switch (action) {
     case "login":
-      return await login(req, res, ctx);
-    case "authenticate":
-      return await authenticate(req, res, ctx);
+      return await loginHandler(req, res, ctx);
+    case "user":
+      return await userHandler(req, res, ctx);
     case "logout":
-      return await logout(req, res);
+      return await logoutHandler(req, res);
     default:
       return res.status(400).json({
         error: "Invalid route for authentication.",

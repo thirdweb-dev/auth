@@ -1,7 +1,7 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { NextApiRequest } from "next";
 
-export type ThirdwebAuthRoute = "login" | "logout" | "authenticate";
+export type ThirdwebAuthRoute = "login" | "logout" | "user";
 
 export type ThirdwebAuthConfig = {
   privateKey: string;

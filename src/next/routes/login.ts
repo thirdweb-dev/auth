@@ -14,7 +14,7 @@ function redirectWithError(
   return res.redirect(url.toString());
 }
 
-export async function login(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
   ctx: ThirdwebAuthContext
