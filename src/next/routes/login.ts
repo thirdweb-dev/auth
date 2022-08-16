@@ -1,4 +1,4 @@
-import { getConfig } from "../helpers";
+import { ThirdwebAuthContext } from "../types";
 import { LoginPayload } from "@thirdweb-dev/sdk/dist/src/schema";
 import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -14,18 +14,16 @@ function redirectWithError(
   return res.redirect(url.toString());
 }
 
-export async function login(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  ctx: ThirdwebAuthContext
+) {
   if (req.method !== "GET") {
     return redirectWithError(req, res, "INVALID_METHOD");
   }
 
-  let sdk, domain;
-  try {
-    ({ sdk, domain } = getConfig());
-  } catch (err) {
-    console.error(err);
-    return redirectWithError(req, res, "MISSING_SERVER_CONFIG");
-  }
+  const { sdk, domain } = ctx;
 
   // Get signed login payload from the frontend
   const payload = JSON.parse(req.query.payload as string) as LoginPayload;

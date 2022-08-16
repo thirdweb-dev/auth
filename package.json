@@ -6,7 +6,6 @@
   "license": "Apache-2.0",
   "files": [
     "dist/",
-    "express/",
     "next/"
   ],
   "scripts": {
@@ -14,8 +13,7 @@
   },
   "preconstruct": {
     "entrypoints": [
-      "next/index.ts",
-      "express/index.ts"
+      "next/index.ts"
     ]
   },
   "devDependencies": {
