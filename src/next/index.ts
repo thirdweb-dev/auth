@@ -5,10 +5,15 @@ import {
   ThirdwebAuthConfig,
   ThirdwebAuthContext,
   ThirdwebAuthRoute,
-  NextApiRequestWithUser,
+  ThirdwebAuthUser,
 } from "./types";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import { NextApiRequest, NextApiResponse } from "next/types";
+import { NextRequest } from "next/server";
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from "next/types";
 
 export * from "./types";
 
@@ -52,33 +57,27 @@ export function ThirdwebAuth(cfg: ThirdwebAuthConfig) {
     return ThirdwebAuthRouter(args[0], args[1], ctx);
   }
 
-  function withThirdwebAuth(
-    handler:
-      | ((req: NextApiRequest, res: NextApiResponse) => any)
-      | ((req: NextApiRequestWithUser, res: NextApiResponse) => any)
+  async function getUser(
+    req: GetServerSidePropsContext["req"] | NextRequest | NextApiRequest
   ) {
-    return async (req: NextApiRequest, res: NextApiResponse) => {
-      const { sdk, domain } = ctx;
-      let user: NextApiRequestWithUser["user"] = null;
-      const token = req.cookies.thirdweb_auth_token;
+    const { sdk, domain } = ctx;
+    let user: ThirdwebAuthUser | null = null;
+    const token =
+      typeof req.cookies.get === "function"
+        ? (req.cookies as any).get("thirdweb_auth_token")
+        : (req.cookies as any).thirdweb_auth_token;
 
-      if (token) {
-        try {
-          const address = await sdk.auth.authenticate(domain, token);
-          user = { address };
-        } catch {
-          // No-op
-        }
+    if (token) {
+      try {
+        const address = await sdk.auth.authenticate(domain, token);
+        user = { address };
+      } catch {
+        // No-op
       }
+    }
 
-      // Add user object to the request
-      const reqWithUser = {
-        ...req,
-        user,
-      };
-      return (handler as any)(reqWithUser, res);
-    };
+    return user;
   }
 
-  return { ThirdwebAuthHandler, withThirdwebAuth };
+  return { ThirdwebAuthHandler, getUser };
 }

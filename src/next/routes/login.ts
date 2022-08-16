@@ -26,7 +26,7 @@ export default async function handler(
   const { sdk, domain } = ctx;
 
   // Get signed login payload from the frontend
-  const payload = JSON.parse(req.query.payload as string) as LoginPayload;
+  const payload = JSON.parse(atob(req.query.payload as string)) as LoginPayload;
   if (!payload) {
     redirectWithError(req, res, "MISSING_LOGIN_PAYLOAD");
   }
@@ -51,5 +51,5 @@ export default async function handler(
     })
   );
 
-  return res.status(301).redirect(req.query.redirectTo as string);
+  return res.status(301).redirect(req.query.redirect as string);
 }

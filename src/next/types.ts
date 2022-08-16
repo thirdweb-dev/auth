@@ -1,5 +1,4 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import { NextApiRequest } from "next";
 
 export type ThirdwebAuthRoute = "login" | "logout" | "user";
 
@@ -15,8 +14,4 @@ export type ThirdwebAuthContext = {
 
 export type ThirdwebAuthUser = {
   address: string;
-};
-
-export type NextApiRequestWithUser = NextApiRequest & {
-  user: ThirdwebAuthUser | null;
 };
