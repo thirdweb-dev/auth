@@ -1,6 +1,6 @@
 {
   "name": "@thirdweb-dev/auth",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": "https://github.com/thirdweb-dev/auth.git",
   "author": "adam-maj <mr.adam.maj@gmail.com>",
   "license": "Apache-2.0",
