@@ -35,7 +35,7 @@ async function ThirdwebAuthRouter(
       return await logoutHandler(req, res);
     default:
       return res.status(400).json({
-        error: "Invalid route for authentication.",
+        message: "Invalid route for authentication.",
       });
   }
 }

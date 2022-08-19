@@ -1,4 +1,4 @@
-import { NextApiRequestWithUser, ThirdwebAuthContext } from "../types";
+import { ThirdwebAuthContext } from "../types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -7,7 +7,7 @@ export default async function handler(
   ctx: ThirdwebAuthContext
 ) {
   const { sdk, domain } = ctx;
-  let user: NextApiRequestWithUser["user"] = null;
+  let user = null;
   const token = req.cookies.thirdweb_auth_token;
 
   if (token) {
