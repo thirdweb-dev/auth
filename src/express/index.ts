@@ -1,14 +1,22 @@
 import loginHandler from "./routes/login";
 import logoutHandler from "./routes/logout";
 import userHandler from "./routes/user";
-import { ThirdwebAuthConfig, ThirdwebAuthRoute } from "./types";
+import {
+  ThirdwebAuthConfig,
+  ThirdwebAuthRoute,
+  ThirdwebAuthUser,
+} from "./types";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import cookieParser from "cookie-parser";
 import { Express, NextFunction, Request, Response } from "express";
 
 export * from "./types";
 
-export function thirdwebAuth(app: Express, cfg: ThirdwebAuthConfig) {
+export function getUser(req: Request): ThirdwebAuthUser | null {
+  return req.user;
+}
+
+export function ThirdwebAuth(app: Express, cfg: ThirdwebAuthConfig) {
   const ctx = {
     ...cfg,
     sdk: ThirdwebSDK.fromPrivateKey(cfg.privateKey, "mainnet"),
