@@ -1,9 +1,9 @@
 import { ThirdwebAuthContext } from "../types";
-import { NextApiRequest, NextApiResponse } from "next";
+import { Request, Response } from "express";
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
+  req: Request,
+  res: Response,
   ctx: ThirdwebAuthContext
 ) {
   const { sdk, domain } = ctx;
