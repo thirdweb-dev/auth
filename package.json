@@ -1,6 +1,6 @@
 {
   "name": "@thirdweb-dev/auth",
-  "version": "0.2.0",
+  "version": "0.2.1-0",
   "repository": "https://github.com/thirdweb-dev/auth.git",
   "author": "adam-maj <mr.adam.maj@gmail.com>",
   "license": "Apache-2.0",
@@ -51,8 +51,8 @@
     "@thirdweb-dev/sdk": "^2.3.35",
     "ethers": ">=5.5.1",
     "express": "^4.18.1",
-    "next-auth": "^4.10.3",
-    "next": "12.2.0"
+    "next": "12.2.0",
+    "next-auth": "^4.10.3"
   },
   "dependencies": {
     "cookie": "^0.5.0",
